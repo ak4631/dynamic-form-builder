@@ -1,0 +1,74 @@
+##########################
+#     Public APIs
+##########################
+
+apiv1_auth_public_validation_password:
+  path: /api/v1/auth/public/validation/password
+  controller: Optimust\Core\Controller\Rest\V1\GenericPublicRestController::handle
+  methods: [ POST ]
+  defaults:
+    _api: Optimust\Authentication\PublicApi\PasswordStrengthValidationAPI
+
+##########################
+#        Screens
+##########################
+
+root:
+  path: /
+  controller: Optimust\Authentication\Controller\RootController::handle
+  methods: [ GET ]
+
+auth_login:
+  path: /auth/login
+  controller: Optimust\Authentication\Controller\LoginController::handle
+  methods: [ GET ]
+
+auth_validate:
+  path: /auth/validate
+  controller: Optimust\Authentication\Controller\ValidateController::handle
+  methods: [ POST ]
+
+auth_logout:
+  path: /auth/logout
+  controller: Optimust\Authentication\Controller\LogoutController::handle
+  methods: [ GET ]
+
+auth_admin_access_verify:
+  path: /auth/adminVerify
+  controller: Optimust\Authentication\Controller\AdministratorVerifyController::handle
+  methods: [ POST ]
+
+auth_request_reset_password:
+  path: /auth/requestResetPassword
+  controller: Optimust\Authentication\Controller\RequestResetPasswordController::handle
+  methods: [ POST ]
+
+auth_reset_password:
+  path: /auth/resetPassword
+  controller: Optimust\Authentication\Controller\ResetPasswordController::handle
+  methods: [ POST ]
+
+auth_send_password_reset:
+  path: /auth/sendPasswordReset
+  controller: Optimust\Authentication\Controller\RequestPasswordSuccessController::handle
+  methods: [ GET ]
+
+auth_forgot_password_username:
+  path: /auth/requestPasswordResetCode
+  controller: Optimust\Authentication\Controller\RequestPasswordController::handle
+  methods: [ GET ]
+
+auth_reset_code:
+  path: /auth/resetPassword/resetCode/{resetCode}
+  controller: Optimust\Authentication\Controller\ResetCodeController::handle
+  methods: [ GET ]
+
+auth_weak_password_reset:
+  path: /auth/changeWeakPassword/resetCode/{resetCode}
+  controller: Optimust\Authentication\Controller\WeakPasswordResetController::handle
+  methods: [ GET ]
+
+auth_request_enforce_password:
+  path: /auth/resetWeakPassword
+  controller: Optimust\Authentication\Controller\RequestResetWeakPasswordController::handle
+  methods: [ POST ]

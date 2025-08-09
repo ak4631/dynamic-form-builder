@@ -1,0 +1,93 @@
+<?php
+
+namespace Optimust\Core\React;
+
+class Prop
+{
+    public const TYPE_STRING = 'String';
+    public const TYPE_NUMBER = 'Number';
+    public const TYPE_BOOLEAN = 'Boolean';
+    public const TYPE_ARRAY = 'Array';
+    public const TYPE_OBJECT = 'Object';
+
+    /**
+     * @var string
+     */
+    protected string $name;
+    /**
+     * @var string
+     */
+    protected string $type = self::TYPE_STRING;
+    /**
+     * @var null|string|int|float|bool|array|object
+     */
+    protected $rawValue = null;
+
+    /**
+     * @param string $name
+     * @param string $type
+     * @param null|string|int|float|bool|array|object $value
+     */
+    public function __construct(string $name, string $type = self::TYPE_STRING, $value = null)
+    {
+        $this->name = $name;
+        $this->type = $type;
+        $this->rawValue = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return array|bool|float|int|object|string|null
+     */
+    public function getRawValue()
+    {
+        return $this->rawValue;
+    }
+
+    /**
+     * @param array|bool|float|int|object|string|null $rawValue
+     */
+    public function setRawValue($rawValue): void
+    {
+        $this->rawValue = $rawValue;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getValue(): ?string
+    {
+        return json_encode($this->rawValue);
+    }
+}

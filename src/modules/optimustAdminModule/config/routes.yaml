@@ -1,0 +1,46 @@
+apiv1_admin_user:
+  path: /api/v1/admin/users/{id}
+  controller: Optimust\Core\Controller\Rest\V1\GenericRestController::handle
+  methods: [ GET, PUT ]
+  defaults:
+    _api: Optimust\Admin\Api\UserAPI
+
+apiv1_admin_users:
+  path: /api/v1/admin/users
+  controller: Optimust\Core\Controller\Rest\V1\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: Optimust\Admin\Api\UserAPI
+
+apiv1_admin_update_password:
+  path: /api/v1/admin/update-password
+  controller: Optimust\Core\Controller\Rest\V1\GenericRestController::handle
+  methods: [ PUT ]
+  defaults:
+    id: 0
+    _api: Optimust\Admin\Api\UpdatePasswordAPI
+
+
+##########################
+#        Screens
+##########################
+
+view_system_users:
+  path: /admin/viewSystemUsers
+  controller: Optimust\Admin\Controller\SystemUserController::handle
+  methods: [ GET ]
+
+save_system_users:
+  path: /admin/saveSystemUser
+  controller: Optimust\Admin\Controller\SaveSystemUserController::handle
+  methods: [ GET ]
+
+edit_system_users:
+  path: /admin/saveSystemUser/{id}
+  controller: Optimust\Admin\Controller\SaveSystemUserController::handle
+  methods: [ GET ]
+
+update_password:
+  path: /admin/updatePassword
+  controller: Optimust\Admin\Controller\UpdatePasswordController::handle
+  methods: [ GET ]

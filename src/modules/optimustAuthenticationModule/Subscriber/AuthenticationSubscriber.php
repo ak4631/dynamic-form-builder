@@ -1,0 +1,126 @@
+<?php
+
+namespace Optimust\Authentication\Subscriber;
+
+use Exception;
+use Optimust\Authentication\Auth\User as AuthUser;
+use Optimust\Authentication\Exception\SessionExpiredException;
+use Optimust\Authentication\Exception\UnauthorizedException;
+use Optimust\Core\Controller\AbstractViewController;
+use Optimust\Core\Controller\PublicControllerInterface;
+use Optimust\Core\Controller\Rest\V1\AbstractRestController;
+use Optimust\Core\Traits\Auth\AuthUserTrait;
+use Optimust\Core\Traits\ServiceContainerTrait;
+use Optimust\Framework\Event\AbstractEventSubscriber;
+use Optimust\Framework\Http\RedirectResponse;
+use Optimust\Framework\Http\Response;
+use Optimust\Framework\Routing\UrlGenerator;
+use Optimust\Framework\Services;
+use Symfony\Component\HttpFoundation\UrlHelper;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+
+class AuthenticationSubscriber extends AbstractEventSubscriber
+{
+    use ServiceContainerTrait;
+    use AuthUserTrait;
+
+    /**
+     * @inheritDoc
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            KernelEvents::REQUEST => [['onRequestEvent', 97000]],
+            KernelEvents::CONTROLLER => [['onControllerEvent', 100000]],
+            KernelEvents::EXCEPTION => [['onExceptionEvent', 0]],
+        ];
+    }
+
+    /**
+     * @param RequestEvent $event
+     */
+    public function onRequestEvent(RequestEvent $event): void
+    {
+        if (!$this->getAuthUser()->isAuthenticated()) {
+            // Stop KernelEvents::REQUEST event propagation and let it throw an exception from AuthenticationSubscriber::onControllerEvent
+            $event->stopPropagation();
+        }
+    }
+
+    /**
+     * @param ControllerEvent $event
+     * @throws Exception
+     */
+    public function onControllerEvent(ControllerEvent $event): void
+    {
+        if ($this->getAuthUser()->isAuthenticated()) {
+            return;
+        }
+
+        if ($this->getControllerInstance($event) instanceof PublicControllerInterface) {
+            return;
+        }
+
+        if ($this->getControllerInstance($event) instanceof AbstractViewController) {
+            /** @var UrlHelper $urlHelper */
+            $urlHelper = $this->getContainer()->get(Services::URL_HELPER);
+            $requestUri = $event->getRequest()->getRequestUri();
+            $redirectUri = $urlHelper->getAbsoluteUrl($requestUri);
+            $this->getAuthUser()->setAttribute(AuthUser::SESSION_TIMEOUT_REDIRECT_URL, $redirectUri);
+            throw new SessionExpiredException();
+        }
+
+        if ($this->getControllerInstance($event) instanceof AbstractRestController) {
+            $response = new Response();
+            $message = 'Session expired';
+            $response->setContent(
+                \Optimust\Core\Api\V1\Response::formatError(
+                    ['error' => ['status' => Response::HTTP_UNAUTHORIZED, 'message' => $message]]
+                )
+            );
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->headers->set(
+                \Optimust\Core\Api\V1\Response::CONTENT_TYPE_KEY,
+                \Optimust\Core\Api\V1\Response::CONTENT_TYPE_JSON
+            );
+            throw new UnauthorizedException($response, $message);
+        }
+
+        // Fallback
+        throw new SessionExpiredException();
+    }
+
+    /**
+     * @param ExceptionEvent $event
+     * @throws Exception
+     */
+    public function onExceptionEvent(ExceptionEvent $event): void
+    {
+        $exception = $event->getThrowable();
+        if ($exception instanceof SessionExpiredException) {
+            /** @var UrlGenerator $urlGenerator */
+            $urlGenerator = $this->getContainer()->get(Services::URL_GENERATOR);
+
+            $loginUrl = $urlGenerator->generate('auth_login', [], UrlGenerator::ABSOLUTE_URL);
+            $response = new RedirectResponse($loginUrl);
+
+            $event->setResponse($response);
+            $event->stopPropagation();
+        } elseif ($exception instanceof UnauthorizedException) {
+            $event->setResponse($exception->getResponse());
+            $event->stopPropagation();
+        }
+    }
+
+    /**
+     * @param ControllerEvent $event
+     * @return mixed
+     */
+    private function getControllerInstance(ControllerEvent $event)
+    {
+        return $event->getController()[0];
+    }
+}

@@ -1,0 +1,121 @@
+.layout-container {
+    display: flex;
+    height: calc(100vh - 1rem);
+  }
+  
+  .sidebar {
+    /* width: 200px; */
+    /* padding: 20px; */
+    /* background-color: #f0f0f0; */
+    /* border-right: 1px solid #ccc; */
+    height: 100%;
+    font-size: 1rem;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .button-container {
+    padding: 10px;
+  }
+  
+  .grid-stack-container {
+    flex-grow: 1;
+  }
+  .grid-stack{
+    border:2px solid black;
+    border-radius: 5px;
+    margin: 10px;
+  }
+  .grid-stack-nested{
+    margin: 0px !important;
+  }
+  .property-editor {
+    width: 250px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-left: 1px solid #ccc;
+  }
+  
+  .grid-stack-item {
+    /* border: 1px solid #ccc; */
+    /* background-color: #fff; */
+    cursor: move;
+    width: 100%;
+    text-align: center;
+    /* margin: 5px; */
+  }
+  
+  .grid-stack-item-content {
+    padding: 5px;
+    font-size: 0.875rem;
+  }
+  
+  .grid-stack-item-content > .grid-stack{
+    border:1px solid blue;
+    height: -webkit-fill-available;
+  }
+  
+  .nested-label {
+    /* position: absolute;
+    top: -20px;
+    left: 0; */
+    /* background-color: #f0f0f0; */
+    padding: 2px 0px;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 3px; */
+    font-size: 0.875rem;
+  }
+  
+  .nested-header{
+    /* top: -23px; */
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    /* border:2px solid black; */
+    width: 100%;
+    padding: 0px 12px;
+    margin-top: 1px;
+  }
+  
+  .grid-stack-sub-grid{
+    position: relative;
+    padding-top: 20px;
+    /* border:2px solid red !important; */
+  }
+  
+  .grid-stack-sub-grid > .grid-stack-item-content{
+    /* border:2px solid black; */
+    margin-top: 20px !important;
+  }
+
+  .element-controls{
+    display: flex;
+    /* align-items: flex-end; */
+    justify-content: end;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .buttons-container{
+    display: flex;
+    gap:0.5rem;
+  }
+  .buttons-container > button{
+    border: none;
+    font-size: 1.2rem;
+    background: transparent;
+  }
+
+  .element-controls {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .element-controls:hover {
+      opacity: 1;
+  }

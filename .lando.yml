@@ -1,0 +1,16 @@
+name: optimust
+recipe: lamp
+config:
+  webroot: .
+  via: apache:2.4
+  php: '8.2'
+  database: mysql:8.0.32
+  composer_version: 2
+services:
+  phpmyadmin:
+    type: phpmyadmin
+proxy:
+  appserver:
+    - optimust.lndo.site
+  phpmyadmin:
+    - optimust.lndo.site.phpmyadmin

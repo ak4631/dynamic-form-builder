@@ -1,0 +1,31 @@
+apiv1_core_data_groups:
+  path: /api/v1/core/data-groups
+  controller: Optimust\Core\Controller\Rest\V1\GenericRestController::handle
+  methods: [ GET, POST, DELETE ]
+  defaults:
+    _api: Optimust\Core\Api\Rest\DataGroupAPI
+
+apiv1_core_about_organization:
+  path: /api/v1/core/about
+  controller: Optimust\Core\Controller\Rest\V1\GenericRestController::handle
+  methods: [ GET ]
+  defaults:
+    id: 0
+    _api: Optimust\Core\Api\Rest\AboutOrganizationAPI
+
+push_events:
+  path: /events/push
+  controller: Optimust\Core\Registration\Controller\PushEventController::handle
+  methods: [ POST ]
+
+##########################
+#     Public APIs
+##########################
+
+apiv1_core_public_api_version:
+  path: /api/v1/core/public/version
+  controller: Optimust\Core\Controller\Rest\V1\GenericPublicRestController::handle
+  methods: [ GET ]
+  defaults:
+    id: 0
+    _api:  Optimust\Core\PublicApi\VersionAPI

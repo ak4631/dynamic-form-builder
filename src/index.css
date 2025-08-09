@@ -1,0 +1,31 @@
+.css-nvf14r-ToastContainer {
+  z-index: 1100 !important;
+}
+
+
+/* Apply custom scroll styles */
+.fixed-scrollable-list {
+  height: 300px;  /* Adjust this as needed */
+  overflow-y: auto;
+}
+
+/* Style for Webkit browsers (Chrome, Safari, Edge) */
+.fixed-scrollable-list::-webkit-scrollbar {
+  width: 8px;  /* Width of the scrollbar */
+}
+
+.fixed-scrollable-list::-webkit-scrollbar-track {
+  background-color: #f0f0f0;  /* Track color */
+  border-radius: 10px;  /* Rounded corners for the track */
+}
+
+.fixed-scrollable-list::-webkit-scrollbar-thumb {
+  background-color: #888;  /* Thumb color */
+  border-radius: 10px;  /* Rounded corners for the thumb */
+  border: 2px solid #f0f0f0;  /* Border to create separation between thumb and track */
+}
+
+/* On hover, change the thumb color */
+.fixed-scrollable-list::-webkit-scrollbar-thumb:hover {
+  background-color: #555;  /* Darker thumb color on hover */
+}
