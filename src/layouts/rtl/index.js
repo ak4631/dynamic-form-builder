@@ -52,11 +52,11 @@ function RTL() {
   const { chart, items } = reportsBarChartData;
 
   // Changing the direction to rtl
-  useEffect(() => {
-    setDirection(dispatch, "rtl");
+  // useEffect(() => {
+  //   setDirection(dispatch, "rtl");
 
-    return () => setDirection(dispatch, "ltr");
-  }, []);
+  //   return () => setDirection(dispatch, "ltr");
+  // }, []);
 
   return (
     <DashboardLayout>

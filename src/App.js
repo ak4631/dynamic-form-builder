@@ -41,7 +41,7 @@ import { useSoftUIController } from "context";
 
 export default function App() {
   const [controller] = useSoftUIController();
-  const { direction } = controller;
+  // const { direction } = controller;
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
