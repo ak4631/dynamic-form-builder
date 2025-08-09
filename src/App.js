@@ -56,9 +56,9 @@ export default function App() {
   }, []);
 
   // Setting the dir attribute for the body element
-  useEffect(() => {
-    document.body.setAttribute("dir", direction);
-  }, [direction]);
+  // useEffect(() => {
+  //   document.body.setAttribute("dir", direction);
+  // }, [direction]);
 
   // Setting page scroll to 0 when changing the route
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function App() {
 
 
 
-  return direction === "rtl" ? (
+  return (
     <CacheProvider value={rtlCache}>
       <ThemeProvider theme={themeRTL}>
         <CssBaseline />
@@ -91,13 +91,5 @@ export default function App() {
         </Routes>
       </ThemeProvider>
     </CacheProvider>
-  ) : (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/optiform" />} />
-      </Routes>
-    </ThemeProvider>
-  );
+  )
 }
