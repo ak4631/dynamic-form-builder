@@ -41,7 +41,8 @@ import { useSoftUIController } from "context";
 
 export default function App() {
   const [controller] = useSoftUIController();
-  // const { direction } = controller;
+  const { direction } = controller;
+  console.log("direction",direction)
   const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
@@ -56,9 +57,9 @@ export default function App() {
   }, []);
 
   // Setting the dir attribute for the body element
-  // useEffect(() => {
-  //   document.body.setAttribute("dir", direction);
-  // }, [direction]);
+  useEffect(() => {
+    document.body.setAttribute("dir", direction);
+  }, [direction]);
 
   // Setting page scroll to 0 when changing the route
   useEffect(() => {
