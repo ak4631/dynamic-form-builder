@@ -1,16 +1,25 @@
 import React from 'react';
-import { Radio, RadioGroup, FormControlLabel, TextField, Checkbox, InputAdornment, Tooltip, Link } from '@mui/material';
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  TextField,
+  Checkbox,
+  InputAdornment,
+  Tooltip,
+  Link,
+  Box,
+  Typography,
+  Button,
+  FormControl,
+  FormLabel
+} from '@mui/material';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { DateTimePicker, LocalizationProvider, renderTimeViewClock } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
-import SoftBox from 'components/SoftBox';
-import SoftTypography from 'components/SoftTypography';
-import SoftInput from 'components/SoftInput';
-import SoftButton from 'components/SoftButton';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
 import * as Icons from '@mui/icons-material';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'
@@ -18,85 +27,111 @@ import Select from 'react-select';
 import CurrencyInput from 'react-currency-input-field';
 import ReactInputMask from 'react-input-mask';
 
-
 const renderElement = (element) => {
   console.log("1.element =", element);
   if (typeof (element) === 'string') {
     element = JSON.parse(element);
   }
-  if (!element) return '<div></div>';
+  if (!element) return <div></div>;
+  
   const iconComponent = element?.properties?.iconComponent ?? null;
   const Icon = iconComponent ? Icons[iconComponent] : null;
   console.log("type =", element.type);
+
   switch (element.type) {
     case 'input':
       let label_val = element.properties.label.replace(/ /g, "_");
       return (
-        <SoftBox fullwidth={true} sx={{ p: "5px", borderRadius: "10px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "10px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
+            )}
+          </Typography>
           <Tooltip title={element.properties.toolTip}>
-            <SoftInput
+            <TextField
               label={element.properties.label}
               placeholder={element.properties.placeholder}
               required={Boolean(element.properties.required)}
-              fullwidth
+              fullWidth
               variant="outlined"
               defaultValue={element.properties.defaultValue}
-              readOnly={element.properties.readOnly}
-              disabled={element.properties.disableField}
-              securefield={Boolean(element.properties.secureField)}
-              sx={{ border: Boolean(element.properties.secureField) ? '2px solid #6f3db4' : '' }}
-              permissions={element.properties.permissions}
+              InputProps={{
+                readOnly: element.properties.readOnly,
+                startAdornment: Icon && (
+                  <InputAdornment position='start'>
+                    <Icon />
+                  </InputAdornment>
+                ),
+                sx: {
+                  border: Boolean(element.properties.secureField) ? '2px solid #6f3db4' : ''
+                }
+              }}
               inputProps={{
                 'aria-label': 'my-input-label',
-                maxLength: `${element.properties.maxLength}`, // Limits input length
-                minLength: `${element.properties.minLength}`,
+                maxLength: element.properties.maxLength,
+                minLength: element.properties.minLength,
                 id: `${label_val}_${element.id}`,
-                // name: `${label_val}_${element.id}`,
-                name: `${element.field_row_id}`,
-                extra_param: "You Can add Multiple extra params" // this property won't come when save
+                name: element.field_row_id,
+                extra_param: "You Can add Multiple extra params"
               }}
-              // icon={{
-              //   component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-              //   direction: "left",
-              // }}
+              disabled={element.properties.disableField}
+              sx={{ mt: 1 }}
             />
           </Tooltip>
-        </SoftBox>
+        </Box>
       );
+
     case 'textarea':
       return (
-        <SoftBox fullwidth sx={{
-          p: "5px", borderRadius: "10px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor, display: 'flex',
-          flexDirection: 'column', height: "100%"
-        }} >
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{
+            p: "5px", 
+            borderRadius: "10px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            display: 'flex',
+            flexDirection: 'column',
+            height: "100%",
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
-          {/* <Tooltip title={element.properties.toolTip}> */}
+            )}
+          </Typography>
           {Boolean(element.properties.enableRichTextEditor) ? (
-            // <ReactQuill theme='snow'
-            //   placeholder={element.properties.placeholder}
-            //   style={{
-            //     height: 'calc(100% - 30px)', // Adjust this value as needed
-            //     display: 'flex',
-            //     flexDirection: 'column',
-            //   }} />
-            <></>
+            <div>Rich text editor placeholder</div>
           ) : (
-            <SoftInput label={element.properties.label}
+            <TextField
+              label={element.properties.label}
               placeholder={element.properties.placeholder}
               multiline
               rows={4}
-              fullwidth
+              fullWidth
               sx={{
                 flex: 1,
                 '& .MuiInputBase-root': {
@@ -111,28 +146,33 @@ const renderElement = (element) => {
               }}
               inputProps={{
                 'aria-label': 'my-input-label',
-                maxLength: `${element.properties.maxLength}`,
-                minLength: `${element.properties.minLength}`,
-                name: `${element.field_row_id}`,
+                maxLength: element.properties.maxLength,
+                minLength: element.properties.minLength,
+                name: element.field_row_id,
                 style: {
                   height: '100%',
                   resize: 'none',
                 },
               }}
-            // enableRichTextEditor={element.properties.enableRichTextEditor}
             />
           )}
-
-          {/* </Tooltip> */}
-        </SoftBox>
+        </Box>
       );
+
     case 'checkbox':
       return (
-        <FormControlLabel sx={{ p: 1, borderRadius: "7px", border: "1px solid black" }}
+        <FormControlLabel 
+          sx={{ 
+            p: 1, 
+            borderRadius: "7px", 
+            border: "1px solid black",
+            width: '100%'
+          }}
           control={<Checkbox checked={Boolean(element.properties.checked)} />}
           label={element.properties.label}
         />
       );
+
     case 'select':
       const customStyles = {
         option: (provided, state) => ({
@@ -146,283 +186,410 @@ const renderElement = (element) => {
         }),
         control: (provided) => ({
           ...provided,
-          padding: 0,          // Remove padding inside the control
-          margin: 0,           // Remove margin around the control
-          fontSize: '1rem',    // Set font size
+          padding: 0,
+          margin: 0,
+          fontSize: '1rem',
         }),
         menu: (provided) => ({
           ...provided,
-          margin: 0,           // Remove margin
+          margin: 0,
         }),
         singleValue: (provided) => ({
           ...provided,
-          fontSize: '1rem',    // Set font size for the selected value
+          fontSize: '1rem',
         }),
         multiValue: (provided) => ({
           ...provided,
-          fontSize: '1rem',    // Set font size for multi-value labels
+          fontSize: '1rem',
         }),
         multiValueLabel: (provided) => ({
           ...provided,
-          fontSize: '1rem',    // Set font size for multi-value labels
+          fontSize: '1rem',
         }),
         multiValueRemove: (provided) => ({
           ...provided,
-          fontSize: '1rem',    // Set font size for multi-value remove button
+          fontSize: '1rem',
         }),
       };
-      const maskedData = element.properties.selectFromModule.map(item => item.value).join('~');
-      // query to make options from here.
-      const fieldData = [{ key: "1", value: maskedData }, { key: "2", value: maskedData }, { key: "3", value: maskedData }];
+
       return (
-        <SoftBox fullWidth sx={{ border: `2px solid ${element.properties.borderColor}`, p: 1, borderRadius: "10px" }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>{element.properties.label}</SoftTypography>
-          {/* <Tooltip title={element.properties.toolTip}> */}
+        <Box 
+          sx={{ 
+            border: `2px solid ${element.properties.borderColor}`, 
+            p: 1, 
+            borderRadius: "10px",
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
+            {element.properties.label}
+          </Typography>
           <Select
             isMulti={element.properties.multiSelect}
             name="options"
-            options={(element?.properties?.selectFromModule?.length > 0 && element?.properties?.derivedFields === true) ? fieldData : element?.properties?.options}
+            options={element?.properties?.options || []}
             getOptionLabel={(option) => option.value}
             getOptionValue={(option) => option.key}
             className="basic-multi-select"
             classNamePrefix="select"
             styles={customStyles}
           />
-          {/* </Tooltip> */}
-        </SoftBox>
+        </Box>
       );
+
     case 'radio':
       return (
-        <SoftBox fullWidth sx={{ border: `2px solid ${element.properties.borderColor}`, p: 1, borderRadius: "10px" }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>{element.properties.label}</SoftTypography>
+        <Box 
+          sx={{ 
+            border: `2px solid ${element.properties.borderColor}`, 
+            p: 1, 
+            borderRadius: "10px",
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
+            {element.properties.label}
+          </Typography>
           <RadioGroup
             row
             sx={{ paddingLeft: 2, borderRadius: "7px" }}
           >
             {element.properties.options.map((option, index) => (
-              <FormControlLabel key={index} value={option.key} control={<Radio />} label={option.value} />
+              <FormControlLabel 
+                key={index} 
+                value={option.key} 
+                control={<Radio />} 
+                label={option.value} 
+              />
             ))}
           </RadioGroup>
-        </SoftBox>
+        </Box>
       );
+
     case 'email':
       return (
-        <SoftBox fullWidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
+            )}
+          </Typography>
           <Tooltip title={element.properties.toolTip}>
-            <SoftInput
+            <TextField
               type="email"
               label={element.properties.label}
               placeholder={element.properties.placeholder}
               required={Boolean(element.properties.required)}
-              fullwidth
+              fullWidth
               variant="outlined"
-              allowMultipleId={Boolean(element.properties.allowMultipleId)}
               inputProps={{
-                name: `${element.field_row_id}`,
-                extra_param: "You Can add Multiple extra params" // this property won't come when save
+                name: element.field_row_id,
+                extra_param: "You Can add Multiple extra params"
               }}
+              sx={{ mt: 1 }}
             />
           </Tooltip>
-        </SoftBox>
+        </Box>
       );
+
     case 'file':
-      const selectedDocumentType = element.properties.allowedDocuments.map(item => item.key).join(',');
+      const selectedDocumentType = element.properties.allowedDocuments?.map(item => item.key).join(',') || '';
+      
       const handleFileChange = (event) => {
         const files = event.target.files;
-        const maxSize = parseInt(element.properties.maxFileSize) * 1024 * 1024 || 5 * 1024 * 1024; // Default to 5MB if not specified
+        const maxSize = parseInt(element.properties.maxFileSize) * 1024 * 1024 || 5 * 1024 * 1024;
 
         for (let i = 0; i < files.length; i++) {
           if (files[i].size > maxSize) {
             alert(`File "${files[i].name}" exceeds the maximum file size of ${maxSize / (1024 * 1024)}MB`);
-            event.target.value = null; // Clear the file input
+            event.target.value = null;
             return;
           }
         }
-
-        // If all files are within the size limit, you can proceed with your file handling logic here
       };
+
       return (
-        <SoftBox fullwidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
+            )}
+          </Typography>
           <Tooltip title={element.properties.toolTip}>
-            <SoftInput
+            <TextField
               type="file"
               label={element.properties.label}
               placeholder={element.properties.placeholder}
               required={Boolean(element.properties.required)}
-              fullwidth
+              fullWidth
               variant="outlined"
               onChange={handleFileChange}
-              inputProps={{
-                multiple: Boolean(element.properties.allowMultiple),
-                accept: `${selectedDocumentType}`,
-                size: element.properties.maxFileSize
+              InputProps={{
+                inputProps: {
+                  multiple: Boolean(element.properties.allowMultiple),
+                  accept: selectedDocumentType,
+                }
               }}
+              sx={{ mt: 1 }}
             />
           </Tooltip>
-        </SoftBox>
+        </Box>
       );
+
     case 'phone':
       return (
-        <SoftBox fullwidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
-          {/* <SoftInput
-              type="tel"
-              label={element.properties.label}
-              placeholder={element.properties.placeholder}
-              required={Boolean(element.properties.required)}
-              fullwidth
-              variant="outlined"
-            /> */}
-          {/* <Tooltip title={element.properties.toolTip}> */}
+            )}
+          </Typography>
           <PhoneInput
             inputProps={{
-              // name: 'phone',
-              name: `${element.field_row_id}`,
+              name: element.field_row_id,
               autoFocus: true,
               required: Boolean(element.properties.required),
               autoformat: true,
               style: { width: '100%' }
             }}
-            fullwidth={true}
+            containerStyle={{ width: '100%' }}
           />
-          {/* </Tooltip> */}
-        </SoftBox>
+        </Box>
       );
+
     case 'url':
       return (
-
-        <SoftBox fullwidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
+            )}
+          </Typography>
           <Tooltip title={element.properties.toolTip}>
-            {element.properties.displayName === "" ?
-              <SoftInput
+            {element.properties.displayName === "" ? (
+              <TextField
                 type="url"
                 label={element.properties.label}
                 placeholder={element.properties.placeholder}
                 required={Boolean(element.properties.required)}
-                fullwidth
+                fullWidth
                 variant="outlined"
-              /> :
-              <Link href="#" underline="hover" sx={{ display: "flex", fontSize: "1rem" }}>
+                sx={{ mt: 1 }}
+              />
+            ) : (
+              <Link 
+                href="#" 
+                underline="hover" 
+                sx={{ display: "flex", fontSize: "1rem", mt: 1 }}
+              >
                 {element.properties.displayName}
               </Link>
-            }
-
+            )}
           </Tooltip>
-        </SoftBox>
+        </Box>
       );
+
     case 'date':
       return (
-        <SoftBox fullWidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
-          <SoftInput
+            )}
+          </Typography>
+          <TextField
             type="date"
             label={element.properties.label}
             placeholder={element.properties.placeholder}
             required={Boolean(element.properties.required)}
-            fullwidth
+            fullWidth
             variant="outlined"
+            InputLabelProps={{ shrink: true }}
+            sx={{ mt: 1 }}
           />
-        </SoftBox>
+        </Box>
       );
+
     case 'time':
       return (
-        <SoftBox fullWidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
-          <SoftInput
+            )}
+          </Typography>
+          <TextField
             type="time"
             label={element.properties.label}
             placeholder={element.properties.placeholder}
             required={Boolean(element.properties.required)}
-            fullwidth
+            fullWidth
             variant="outlined"
+            InputLabelProps={{ shrink: true }}
+            sx={{ mt: 1 }}
           />
-        </SoftBox>
+        </Box>
       );
+
     case 'button':
       return (
-        <SoftButton
+        <Button
           type="button"
           fullWidth
-          inputlabelprops={{
-            shrink: true,
+          variant={element.properties.variant || 'contained'}
+          color={element.properties.color || 'primary'}
+          size={element.properties.size || 'medium'}
+          sx={{ 
+            p: 1, 
+            borderRadius: "7px", 
+            border: "1px solid black"
           }}
-          variant={element.properties.variant}
-          color={element.properties.color}
-          size={element.properties.size}
-          sx={{ p: 1, borderRadius: "7px", border: "1px solid black" }}
         >
           {element.properties.label}
-        </SoftButton>
+        </Button>
       );
-    case 'price':
 
-      const handleBlur = () => {
-        const condition = 'roundOff'; // Replace with dynamic condition if needed
-        const decimals = element.properties.decimalsLimit;
-        const roundedValue = applyRounding(inputValue, condition, decimals);
-        setInputValue(roundedValue);
-      };
+    case 'price':
       return (
-        <SoftBox fullwidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
+            )}
+          </Typography>
           <Tooltip title={element.properties.toolTip}>
-            <SoftBox
-              sx={{ display: "flex", flexDirection: "column-reverse" }}
-            >
+            <Box sx={{ display: "flex", flexDirection: "column-reverse" }}>
               <CurrencyInput
                 customInput={TextField}
-                prefix={element.properties.currency.key === undefined ? '$' : element.properties.currency.key}
+                prefix={element.properties.currency?.key || '$'}
                 decimalsLimit={element.properties.decimalsLimit}
                 decimalScale={element.properties.decimalsLimit}
                 fixedDecimalScale
                 groupSeparator=","
-                permissions={element.properties.permissions}
-                // value={inputValue}
-                // onValueChange={(value) => setInputValue(value)}
-                // onBlur={handleBlur}
-                // icon={{
-                //   component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                //   direction: "left",
-                // }}
-                // decimalSeparator={element.properties.currency.key === '' }
+                InputProps={{
+                  startAdornment: Icon && (
+                    <InputAdornment position='start'>
+                      <Icon />
+                    </InputAdornment>
+                  ),
+                }}
                 sx={{
                   width: '100%',
                   '& .MuiInputBase-root': {
@@ -432,81 +599,85 @@ const renderElement = (element) => {
                     width: '100% !important',
                   }
                 }}
-
               />
-              {/* <NumericFormat value={12323} 
-              customInput={TextField} 
-              prefix='$'
-              thousandSeparator="." 
-              allowedDecimalSeparators={[',']}
-              decimalSeparator=','
-              /> */}
-            </SoftBox>
+            </Box>
           </Tooltip>
-        </SoftBox>
+        </Box>
       );
+
     case 'dateAndTime':
       let views;
       let formatVal;
       let mask;
 
-      switch (element.properties.type.key) {
+      switch (element.properties.type?.key) {
         case 'date':
-          views = ['day']; // Only show day view for date
-          formatVal = element.properties.inputMaskFormat.key || "yyyy/MM/dd";
+          views = ['day'];
+          formatVal = element.properties.inputMaskFormat?.key || "yyyy/MM/dd";
           mask = element.properties.mask || "__/__/____";
           break;
         case 'time':
-          views = ['hours', 'minutes']; // Only show time views
-          formatVal = element.properties.inputMaskFormat.key || "HH:mm";
+          views = ['hours', 'minutes'];
+          formatVal = element.properties.inputMaskFormat?.key || "HH:mm";
           mask = "__:__";
           break;
         case 'dateAndTime':
         default:
-          views = ['year', 'month', 'day', 'hours', 'minutes']; // Show all views for datetime
-          formatVal = element.properties.inputMaskFormat.key || "yyyy/MM/dd HH:mm";
+          views = ['year', 'month', 'day', 'hours', 'minutes'];
+          formatVal = element.properties.inputMaskFormat?.key || "yyyy/MM/dd HH:mm";
           mask = element.properties.mask || "__/__/____ __:__";
           break;
       }
 
       return (
-        <SoftBox sx={{ p: "5px", border: "1px solid black", display: "flex", flexDirection: "column" }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1, color: `${element.properties.fontColor}` }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            border: "1px solid black", 
+            display: "flex", 
+            flexDirection: "column",
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1, color: element.properties.fontColor }}
+          >
             {element.properties.label}
-            {/* label={element.properties.label} */}
-          </SoftTypography>
+          </Typography>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DateTimePicker
               value={element.properties.value || null}
               onChange={(newValue) => {
-
                 console.log(newValue);
               }}
               views={views}
-              required={Boolean(element.properties.required)}
               format={formatVal}
-              mask={mask}
-              minDateTime={element.properties.minDateTime}
-              maxDateTime={element.properties.maxDateTime}
               disabled={Boolean(element.properties.disabled)}
               readOnly={Boolean(element.properties.readOnly)}
               slots={{
-                textField: (params) => <TextField
-                  {...params}
-                  fullWidth
-                  sx={{
-                    position: 'relative',
-                    '& .MuiInputBase-root': {
-                      paddingRight: '40px', // Add padding to make space for the icon
-                    },
-                    '& .MuiInputAdornment-root': {
-                      position: 'absolute',
-                      right: '10px', // Adjust position as needed
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                    },
-                  }}
-                />
+                textField: (params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    required={Boolean(element.properties.required)}
+                    sx={{
+                      position: 'relative',
+                      '& .MuiInputBase-root': {
+                        paddingRight: '40px',
+                      },
+                      '& .MuiInputAdornment-root': {
+                        position: 'absolute',
+                        right: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                      },
+                    }}
+                  />
+                )
               }}
               viewRenderers={{
                 hours: renderTimeViewClock,
@@ -515,26 +686,48 @@ const renderElement = (element) => {
               }}
             />
           </LocalizationProvider>
-        </SoftBox>
-
+        </Box>
       );
+
     case 'secureField':
       return (
-        <SoftBox fullwidth sx={{ p: "5px", borderRadius: "7px", border: `1px solid ${element.properties.borderColor}`, bgcolor: element.properties.backgroundColor }}>
-          <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1 }}>
+        <Box 
+          sx={{ 
+            p: "5px", 
+            borderRadius: "7px", 
+            border: `1px solid ${element.properties.borderColor}`, 
+            bgcolor: element.properties.backgroundColor,
+            width: '100%'
+          }}
+        >
+          <Typography 
+            component="label" 
+            variant="caption" 
+            fontWeight="bold" 
+            fontSize="1rem" 
+            sx={{ my: 1 }}
+          >
             {element.properties.label}
-            {Boolean(element.properties.required) ? (
+            {Boolean(element.properties.required) && (
               <span style={{ color: 'red', marginLeft: '4px' }}>*</span>
-            ) : ''}
-          </SoftTypography>
+            )}
+          </Typography>
           <ReactInputMask
             mask={element.properties.mask}
             maskChar={element.properties.maskCharacter}
-            style={{ display: "flex", width: "100%", fontSize: " 1rem", padding: "0.8rem", borderRadius: " 10px", fontFamily: "monospace" }}
+            style={{ 
+              display: "flex", 
+              width: "100%", 
+              fontSize: " 1rem", 
+              padding: "0.8rem", 
+              borderRadius: " 10px", 
+              fontFamily: "monospace",
+              border: "1px solid #ccc"
+            }}
           />
-        </SoftBox>
-
+        </Box>
       );
+
     default:
       return null;
   }

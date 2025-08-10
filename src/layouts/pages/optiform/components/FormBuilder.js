@@ -5,21 +5,32 @@ import Toolbox from './ToolBox';
 import Editor from './Editor';
 import Preview from './Preview';
 
-// import { Box, Grid, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Switch } from '@mui/material';
-import { Box, Grid, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, Switch, FormControlLabel, MenuItem, Paper, Checkbox, CircularProgress, Backdrop  } from '@mui/material';
+import { 
+  Box, 
+  Grid, 
+  Button, 
+  TextField, 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  DialogActions, 
+  Switch, 
+  FormControlLabel, 
+  MenuItem, 
+  Paper, 
+  Checkbox, 
+  CircularProgress, 
+  Backdrop, 
+  Typography 
+} from '@mui/material';
 import uuid from 'react-uuid';
 import { DateTimePicker, LocalizationProvider, renderTimeViewClock } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
-import SoftInput from 'components/SoftInput';
-import SoftBox from 'components/SoftBox';
-import SoftTypography from 'components/SoftTypography';
-import SoftButton from 'components/SoftButton';
 import IconPicker from '../utils/IconPicker';
 import Select from 'react-select';
-// import { toolboxItems, getDefaultProperties } from './Utility';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Delete  } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import PreviewIcon from '@mui/icons-material/Preview';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -28,13 +39,12 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../../../config'
 import useNotify from 'components/Notify';
 
-const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
+const FormBuilder = ({toolboxItems, getDefaultProperties, accordion = 0}) => {
      
-  // const { state } = useLocation();
-  // const {source, sourceId, parentId } = state;   
-  // console.log("this is state data: ",state);   
-  const [loading, setLoading] = useState(false); // State for tracking the loader visibility
-  // Just pass elements & layouts here here,
+  const { state } = useLocation();
+  const {source, sourceId, parentId } = state;   
+  console.log("this is state data: ", state);   
+  const [loading, setLoading] = useState(false);
   const [elements, setElements] = useState([]);
   const [selectedElement, setSelectedElement] = useState(null);
   const [layout, setLayout] = useState([]);
@@ -46,11 +56,11 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
   const [fieldList, setFieldList] = useState([]);
 
   const [dateTimeMask, setDateTimeMask] = useState([]);
-  const [dateType,setDateType] = useState(null)
-  const [selectedDateTimeMask,setselectedDateTimeMask] = useState([]);
+  const [dateType, setDateType] = useState(null)
+  const [selectedDateTimeMask, setselectedDateTimeMask] = useState([]);
   const navigate = useNavigate();
   const unique_id = uuid();
-  const [moduleName,setModuleName] = useState(null)
+  const [moduleName, setModuleName] = useState(null)
 
   const Documentoptions = [
     { key: 'image/*', value: 'Image' },
@@ -71,28 +81,28 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
   ];
 
   const currencyOptions = [
-    { key: '$', value: 'United States Dollar' },    // USD
-    { key: '€', value: 'Euro' },                     // EUR
-    { key: '¥', value: 'Japanese Yen' },             // JPY
-    { key: '£', value: 'British Pound Sterling' },   // GBP
-    { key: 'A$', value: 'Australian Dollar' },       // AUD
-    { key: 'C$', value: 'Canadian Dollar' },         // CAD
-    { key: 'CHF', value: 'Swiss Franc' },            // CHF
-    { key: '¥', value: 'Chinese Yuan' },             // CNY
-    { key: '₹', value: 'Indian Rupee' },              // INR
-    { key: '$', value: 'Mexican Peso' },             // MXN
-    { key: '₽', value: 'Russian Ruble' },             // RUB
-    { key: 'R', value: 'South African Rand' }         // ZAR
+    { key: '$', value: 'United States Dollar' },
+    { key: '€', value: 'Euro' },
+    { key: '¥', value: 'Japanese Yen' },
+    { key: '£', value: 'British Pound Sterling' },
+    { key: 'A$', value: 'Australian Dollar' },
+    { key: 'C$', value: 'Canadian Dollar' },
+    { key: 'CHF', value: 'Swiss Franc' },
+    { key: '¥', value: 'Chinese Yuan' },
+    { key: '₹', value: 'Indian Rupee' },
+    { key: '$', value: 'Mexican Peso' },
+    { key: '₽', value: 'Russian Ruble' },
+    { key: 'R', value: 'South African Rand' }
   ];
   
   const calculationConditions = [
-    { key: 'actual', value: 'Actual' },    
-    { key: 'roundOff', value: 'Round Off' },         
-    { key: 'roundUp', value: 'Round Up' },       
-    { key: 'roundDown', value: 'Round Down' }       
+    { key: 'actual', value: 'Actual' },
+    { key: 'roundOff', value: 'Round Off' },
+    { key: 'roundUp', value: 'Round Up' },
+    { key: 'roundDown', value: 'Round Down' }
   ];
 
-  const dateTimeOptions=[
+  const dateTimeOptions = [
     { key: "dateAndTime", value: 'Date and Time' },
     { key: "date", value: 'Date' },
     { key: "time", value: 'Time' },
@@ -141,14 +151,15 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
     handlePropertyChange("selectFromModule", selectedOptions);
   };
 
-  const handleDatetimeMaskChange = (dataType,selectedOptions) =>{
+  const handleDatetimeMaskChange = (dataType, selectedOptions) => {
     setselectedDateTimeMask(selectedOptions);
-    handlePropertyChange("inputMaskFormat",selectedOptions);
+    handlePropertyChange("inputMaskFormat", selectedOptions);
   }
 
   const token = localStorage.getItem('jwt');
   const { id } = useParams();
   const notify = useNotify();
+  
   const onDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -160,18 +171,15 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
 
       const newElement = {
         id: `element-${elements.length + 1}-${unique_id}`,
-        // type: result.draggableId,
         type: fieldType,
         typeId: typeId,
-        parent:parent,
-        // properties: getDefaultProperties(result.draggableId),
+        parent: parent,
         properties: {
-          // ...getDefaultProperties(result.draggableId),
           ...getDefaultProperties(fieldType),
-          // typeId: typeId // Add the typeId to the properties
         },
       };
       setElements([...elements, newElement]);
+      
       // Calculate the drop position
       const dropIndex = result.destination.index;
       const yPos = layout.length > 0
@@ -214,24 +222,21 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
     }
   };
 
-  const handleElementClick = (event,element) => {
-    // console.log(event,element)
+  const handleElementClick = (event, element) => {
     setSelectedElement(element);
   };
 
-
-  const handleFormatChanges = (item) =>{
-    // console.log(item);
+  const handleFormatChanges = (item) => {
     setDateType(item);
-    handlePropertyChange("type",item);
+    handlePropertyChange("type", item);
     setselectedDateTimeMask(null);
-    if(item.key === "dateAndTime"){
+    if (item.key === "dateAndTime") {
       setDateTimeMask(dateTimeFormats);
     }
-    else if(item.key === "date"){
+    else if (item.key === "date") {
       setDateTimeMask(dateFormats);
     }
-    else if(item.key === "time"){
+    else if (item.key === "time") {
       setDateTimeMask(timeFormats);
     } 
   }
@@ -239,26 +244,23 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
   const handleModuleChange = async (item) => {
     setSelectedModule(item);
     setSelectedFields([]);
-    // const fields = await fetchModuleFields(key, item);
     console.log(item.value);
     if (parseInt(item.key) === 3) {
       const fieldList = [
-      { key: '1', value: 'First Name' },
-      { key: '2', value: 'Last Name' },
-      { key: '3', value: 'Plantiff Name' },
-      { key: '4', value: 'Defendant Name' }
-    ];
+        { key: '1', value: 'First Name' },
+        { key: '2', value: 'Last Name' },
+        { key: '3', value: 'Plantiff Name' },
+        { key: '4', value: 'Defendant Name' }
+      ];
       setFieldList(fieldList);
     }
-    else{
+    else {
       setFieldList([]);
     }
-    handlePropertyChange("selectFromModule",[]);
-    // setModuleFields(fields);
+    handlePropertyChange("selectFromModule", []);
   };
 
   const handlePropertyChange = (property, value) => {
-    
     if (selectedElement) {
       const updatedElements = elements.map((el) =>
         el.id === selectedElement.id
@@ -309,46 +311,35 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
   };
 
   const handleSave = async () => {
-    // setLoading(true); // Show loader
+    setLoading(true);
     const formData = {
       elements,
       layout,
     };
-
-    console.log(formData);
-    // const json = JSON.stringify(formData, null, 2);
-    // const blob = new Blob([json], { type: 'application/json' });
-    // const url = URL.createObjectURL(blob);
-    // const link = document.createElement('a');
-    // link.href = url;
-    // link.download = 'form_data.json';
-    // link.click();
-    // URL.revokeObjectURL(url);
-    // save this file directly into db
-    // try {
-    //   const response = await axios.post(API_BASE_URL + `/saveForm`, {formData,id, source, sourceId, parentId}, {
-    //     headers: { Authorization: `Bearer ${token}` }
-    //   });
-    //   console.log("this is response data: ", response);
-    //   if (response.data.err_flag == 1) {
-    //     notify(response.data.err_msg, 'e');
-    //   }
-    //   else {
-    //     notify(response.data.res, 's');
-    //     if (typeof response.data.design !== undefined) {
-    //       setElements(response.data.design.elements);
-    //       setLayout(response.data.design.layout);
-    //       // setLoadDialogOpen(false);
-    //       setLoadJson('');
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.error(error.response?.status === 401 ? 'Unauthorized access - invalid or expired token' : 'An error occurred:', error);
-    // }
-    // finally {
-    //   fetchDesign(id);
-    //   setLoading(false); // Hide loader after operation is complete
-    // }
+    
+    try {
+      const response = await axios.post(API_BASE_URL + `/saveForm`, {formData, id, source, sourceId, parentId}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log("this is response data: ", response);
+      if (response.data.err_flag == 1) {
+        notify(response.data.err_msg, 'e');
+      }
+      else {
+        notify(response.data.res, 's');
+        if (typeof response.data.design !== undefined) {
+          setElements(response.data.design.elements);
+          setLayout(response.data.design.layout);
+          setLoadJson('');
+        }
+      }
+    } catch (error) {
+      console.error(error.response?.status === 401 ? 'Unauthorized access - invalid or expired token' : 'An error occurred:', error);
+    }
+    finally {
+      fetchDesign(id);
+      setLoading(false);
+    }
   };
 
   const handleLoad = () => {
@@ -379,60 +370,57 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
     }
   };
    
-  // const fetchDesign = useCallback(async (id) => {  
-  //   if (token) {
-  //     try {
-  //       const response = await axios.get(API_BASE_URL + `/getDesign`, {
-  //         params: {id,source, sourceId, parentId},
-  //         // params: {id,source},
-  //         headers: { Authorization: `Bearer ${token}` }
-  //       });
-  //       if (Object.keys(response.data.design).length > 0) {
-  //         // setElements(response.data.design.elements);
-  //         // setLayout(response.data.design.layout);
-  //         setElements(response.data.design.elements);
-  //         setLayout(response.data.design.layout);
-  //         setLoadDialogOpen(false);
-  //         setLoadJson('');
-  //       }
-  //       if (Object.keys(response.data.moduleName) != "") {
-  //         console.log()
-  //         setModuleName(response.data.moduleName);
-  //       }
-  //     } catch (error) {
-  //       console.error(error.response?.status === 401 ? 'Unauthorized access - invalid or expired token' : 'An error occurred:', error);
-  //     }
-  //   }
-  // },[token]);
+  const fetchDesign = useCallback(async (id) => {  
+    if (token) {
+      try {
+        const response = await axios.get(API_BASE_URL + `/getDesign`, {
+          params: {id, source, sourceId, parentId},
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (Object.keys(response.data.design).length > 0) {
+          setElements(response.data.design.elements);
+          setLayout(response.data.design.layout);
+          setLoadDialogOpen(false);
+          setLoadJson('');
+        }
+        if (Object.keys(response.data.moduleName) != "") {
+          console.log()
+          setModuleName(response.data.moduleName);
+        }
+      } catch (error) {
+        console.error(error.response?.status === 401 ? 'Unauthorized access - invalid or expired token' : 'An error occurred:', error);
+      }
+    }
+  }, [token]);
 
-  // useEffect(() => {
-  //   fetchDesign(id);
-  // }, [fetchDesign]);
+  useEffect(() => {
+    fetchDesign(id);
+  }, [fetchDesign]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={0}>
           <Grid item xs={12} sx={{ marginBottom: 3 }}>
-            <SoftButton variant="gradient" color="warning" size="medium" onClick={() => navigate('/opticore')}  sx={{ mr: 1 }}>
-              <ArrowBackIcon style={{ fontSize: '15px', transform: 'scale(1.2)', marginBottom:'2px' }} />
-            </SoftButton>
-            <SoftButton variant="gradient" color="info" size="medium" onClick={handleSave} sx={{ alignItems: 'center', width: 'auto' }}>
-              <SaveAsIcon style={{ fontSize: '15px', transform: 'scale(1.2)', marginBottom:'2px' }} /> &nbsp;&nbsp;Save
-            </SoftButton>
-            {/* {loading && (
-              <CircularProgress
-                size={24}
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  marginTop: -12,
-                  marginLeft: -12,
-                }}
-              />
-            )} */}
-            {/* Backdrop to cover the page with a white background */}
+            <Button 
+              variant="contained" 
+              color="warning" 
+              size="medium" 
+              onClick={() => navigate('/opticore')}  
+              sx={{ mr: 1 }}
+            >
+              <ArrowBackIcon style={{ fontSize: '15px', transform: 'scale(1.2)', marginBottom: '2px' }} />
+            </Button>
+            <Button 
+              variant="contained" 
+              color="info" 
+              size="medium" 
+              onClick={handleSave} 
+              sx={{ alignItems: 'center', width: 'auto' }}
+            >
+              <SaveAsIcon style={{ fontSize: '15px', transform: 'scale(1.2)', marginBottom: '2px' }} /> &nbsp;&nbsp;Save
+            </Button>
+            
             <Backdrop 
               sx={{
                 color: '#fff',
@@ -441,42 +429,48 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                zIndex: 9999, // Ensure backdrop is on top of all content
-                backgroundColor: 'rgba(255, 255, 255, 0.9)', // Light white with some opacity
+                zIndex: 9999,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
               }}
               open={loading}
             >
               <CircularProgress
-                size={100} // Bigger loader
+                size={100}
                 sx={{
-                  color: '#28a745', // Green color to match the success button
-                  margin: 'auto', // Center the loader within the backdrop
+                  color: '#28a745',
+                  margin: 'auto',
                 }}
               />
             </Backdrop>
-            {/* <SoftButton variant="contained" onClick={handleLoad} sx={{ mr: 1 }}>
-              Load
-            </SoftButton> */}
+            
             &nbsp;
-            <SoftButton variant="gradient" color="info" size="medium" onClick={handlePreview}>
-              <PreviewIcon style={{ fontSize: '15px', transform: 'scale(1.2)', marginBottom:'2px' }} /> &nbsp;&nbsp;Preview
-            </SoftButton>
-            <SoftTypography variant="h4" fontWeight={"bold"} fontFamily={"monospace"} align="center" textTransform='uppercase' gutterBottom style={
-              {position: 'absolute',
-              top: '11%',
-              left: '48%',
-              transform: 'translate(-50%, -50%)',
-              margin: 'auto'}
-            }>
-                {moduleName}
-              </SoftTypography>
+            <Button variant="contained" color="info" size="medium" onClick={handlePreview}>
+              <PreviewIcon style={{ fontSize: '15px', transform: 'scale(1.2)', marginBottom: '2px' }} /> &nbsp;&nbsp;Preview
+            </Button>
+            <Typography 
+              variant="h4" 
+              fontWeight="bold" 
+              fontFamily="monospace" 
+              align="center" 
+              textTransform='uppercase' 
+              gutterBottom 
+              style={{
+                position: 'absolute',
+                top: '11%',
+                left: '48%',
+                transform: 'translate(-50%, -50%)',
+                margin: 'auto'
+              }}
+            >
+              {moduleName}
+            </Typography>
           </Grid>
-          <Grid sx={{ flexGrow: 1, justifyContent: "space-between" }} container spacing={2} >
-            <Grid item xs={1.5} >
-              
+          
+          <Grid sx={{ flexGrow: 1, justifyContent: "space-between" }} container spacing={2}>
+            <Grid item xs={1.5}>
               <Toolbox toolboxItems={toolboxItems} accordion={accordion}/>
             </Grid>
-            <Grid item xs={8} >
+            <Grid item xs={8}>
               <Editor
                 elements={elements}
                 layout={layout}
@@ -486,18 +480,15 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                 onDeleteElement={handleDeleteElement}
               />
             </Grid>
-            <Grid item xs={2}  >
-              
-              <Paper >
+            <Grid item xs={2}>
+              <Paper>
                 {selectedElement && (
-                  <SoftBox
-                    my={0}
-                    display="flex"
-                    gap={2}
-                    p={2}
-                    className="scrollable-div"
+                  <Box
                     sx={{
-                      // border: '',
+                      my: 0,
+                      display: 'flex',
+                      gap: 2,
+                      p: 2,
                       flexDirection: 'column',
                       fontFamily: 'Monospace',
                       fontSize: 18,
@@ -507,80 +498,84 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                       height: "80vh",
                       overflowY: 'auto'
                     }}
+                    className="scrollable-div"
                   >
-                    <SoftTypography variant="h4" fontWeight={"bold"} fontFamily={"monospace"} align="center" textTransform='uppercase' gutterBottom>
+                    <Typography 
+                      variant="h4" 
+                      fontWeight="bold" 
+                      fontFamily="monospace" 
+                      align="center" 
+                      textTransform='uppercase' 
+                      gutterBottom
+                    >
                       Properties
-                    </SoftTypography>
+                    </Typography>
                     {Object.entries(selectedElement.properties).map(([key, value]) => {
                         
                       if (key === 'options' && Array.isArray(value)) {
                         return (
                           <div key={key}>
-                            <SoftTypography component="h4" variant="h6" fontWeight="medium">Options</SoftTypography>
-                            <SoftTypography component="h4" variant="h6" fontWeight="medium">
-                              <div style={{display:"flex",justifyContent:"space-between",width:"50%",marginLeft:"3px"}}>
+                            <Typography component="h4" variant="h6" fontWeight="medium">Options</Typography>
+                            <Typography component="h4" variant="h6" fontWeight="medium">
+                              <div style={{display: "flex", justifyContent: "space-between", width: "50%", marginLeft: "3px"}}>
                                 <p>Key</p>
                                 <p>Value</p>
                               </div>
-
-                            </SoftTypography>
+                            </Typography>
                             {value.map((option, index) => (
                               <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                <SoftInput
+                                <TextField
                                   placeholder="Key"
                                   value={option.key || ''}
                                   onChange={(e) => handleOptionChange(index, 'key', e.target.value)}
-                                  style={{ marginRight: '10px' }}
+                                  size="small"
+                                  sx={{ marginRight: '10px' }}
                                 />
-                                <SoftInput
+                                <TextField
                                   placeholder="Value"
                                   value={option.value || ''}
                                   onChange={(e) => handleOptionChange(index, 'value', e.target.value)}
-                                  style={{ marginRight: '10px' }}
+                                  size="small"
+                                  sx={{ marginRight: '10px' }}
                                 />
-                                {/* <SoftButton
-                                  variant="outlined"
-                                  color="error"
-                                  size="medium"
+                                <DeleteForeverIcon 
+                                  fontSize='large' 
+                                  style={{ cursor: 'pointer', color: 'red' }} 
                                   onClick={() => handleRemoveOption(index)}
-                                >
-                                  remove */}
-                                  <DeleteForeverIcon fontSize='large' style={{cursor: 'pointer',color: 'red'}} onClick={() => handleRemoveOption(index)}/>
-                                {/* </SoftButton> */}
+                                />
                               </div>
                             ))}
-                            <SoftButton
+                            <Button
                               variant="contained"
                               color="primary"
                               size="small"
                               onClick={handleAddOption}
                             >
                               Add Option
-                            </SoftButton>
+                            </Button>
                           </div>
                         );
                       }
                       else if (key === 'required' || key === 'checked' || key === "allowMultiple" || key === "disableField" || key === "readOnly" || key === "allowMultipleId" || key === "enableRichTextEditor" || key === "multiSelect") {
                         return (
-                            <FormControlLabel
-                              key={key}
-                              label={<SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">{key.charAt(0).toUpperCase() + key.slice(1)}</SoftTypography>}
-                              control={
-                                <Switch
-                                  checked={value}
-                                  onChange={(e) => handlePropertyChange(key, e.target.checked)}
-                                />
-                              }
-                              sx={{ p: 1, display: 'flex', justifyContent: 'space-between', flexDirection: 'row-reverse' }}
-                            />
-
+                          <FormControlLabel
+                            key={key}
+                            label={<Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">{key.charAt(0).toUpperCase() + key.slice(1)}</Typography>}
+                            control={
+                              <Switch
+                                checked={value}
+                                onChange={(e) => handlePropertyChange(key, e.target.checked)}
+                              />
+                            }
+                            sx={{ p: 1, display: 'flex', justifyContent: 'space-between', flexDirection: 'row-reverse' }}
+                          />
                         );
                       }
                       else if (key === "derivedFields") {
                         return (
                           <div key={key}>
                             <FormControlLabel
-                              label={<SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">Select From Module</SoftTypography>}
+                              label={<Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">Select From Module</Typography>}
                               control={
                                 <Switch
                                   checked={value}
@@ -591,36 +586,34 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                             />
                             {value && (
                               <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                                <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                                <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                                   Select Module
-                                </SoftTypography>
+                                </Typography>
                                 <Select
                                   value={selectedModule}
                                   isMulti={false}
                                   name="Modules"
                                   options={ModuleList}
-                                  getOptionLabel ={(option)=>option.value}
-                                  getOptionValue ={(option)=>option.key}
+                                  getOptionLabel={(option) => option.value}
+                                  getOptionValue={(option) => option.key}
                                   className="basic-select"
                                   classNamePrefix="select"
                                   onChange={handleModuleChange}
                                 />
-                                {/* {console.log(fieldList)} */}
                                 {selectedModule && (
                                   <div key={key}>
-                                    <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                                    <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                                       Select Field
-                                    </SoftTypography>
+                                    </Typography>
                                     <Select
                                       value={selectedFields}
                                       isMulti={true}
                                       name="ModuleFields"
                                       options={fieldList}
-                                      getOptionLabel ={(option)=>option.value}
-                                      getOptionValue ={(option)=>option.key}
+                                      getOptionLabel={(option) => option.value}
+                                      getOptionValue={(option) => option.key}
                                       className="basic-multi-select"
                                       classNamePrefix="select"
-                                      // onChange={(item) => handlePropertyChange("selectFromModule", item)}
                                       onChange={handleFieldChange}
                                     />
                                   </div>
@@ -638,55 +631,57 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                             : ['small', 'medium', 'large'];
 
                         return (
-                          <FormControlLabel
-                            key={key}
-                            control={
-                              <Select
-                                value={value}
-                                onChange={(e) => handlePropertyChange(key, e.target.value)}
-                                fullWidth
-                              >
-                                {options.map((option) => (
-                                  <MenuItem key={option} value={option}>
-                                    {option}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            }
-                            label={key.charAt(0).toUpperCase() + key.slice(1)}
-                            labelPlacement="top"
-                          />
+                          <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                            <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                              {key.charAt(0).toUpperCase() + key.slice(1)}
+                            </Typography>
+                            <TextField
+                              select
+                              value={value}
+                              onChange={(e) => handlePropertyChange(key, e.target.value)}
+                              fullWidth
+                              size="small"
+                            >
+                              {options.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                            </TextField>
+                          </div>
                         );
                       }
                       else if (key === 'borderColor' || key === 'backgroundColor' || key === 'fontColor') {
                         return (
                           <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                            <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                            <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                               {key.charAt(0).toUpperCase() + key.slice(1)}
-                            </SoftTypography>
-                            <SoftInput
-                              type="color" // or use your custom color input implementation
+                            </Typography>
+                            <TextField
+                              type="color"
                               value={value}
                               onChange={(e) => handlePropertyChange(key, e.target.value)}
-                              fullwidth
+                              fullWidth
+                              size="small"
                             />
                           </div>
                         );
                       }
-                      else if (key === 'maxLength' || key === 'minLength' || key === "maxFileSize" || key === "decimalsLimit" || key === 'min' || key === 'max' ) {
+                      else if (key === 'maxLength' || key === 'minLength' || key === "maxFileSize" || key === "decimalsLimit" || key === 'min' || key === 'max') {
                         return (
                           <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                            <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                            <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                               {key.charAt(0).toUpperCase() + key.slice(1)}
                               {key === "maxFileSize" ? (
                                 <span style={{ color: 'red', marginLeft: '4px', fontSize: "13px" }}>Max Size 10 MB</span>
                               ) : ''}
-                            </SoftTypography>
-                            <SoftInput
-                              type="number" // or use your custom color input implementation
+                            </Typography>
+                            <TextField
+                              type="number"
                               value={value}
                               onChange={(e) => handlePropertyChange(key, e.target.value)}
-                              fullwidth
+                              fullWidth
+                              size="small"
                               inputProps={{
                                 max: (key === "maxFileSize" ? '10' : '')
                               }}
@@ -698,11 +693,18 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                         let returnVal = '';
                         if (key === 'value' || key === 'minDateTime' || key === 'maxDateTime') {
                           returnVal = (
-                            <SoftBox key={key} sx={{ p: "5px", border: "1px solid black", display: "flex", flexDirection: "column" }}>
-                              <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1 }}>
+                            <Box 
+                              key={key} 
+                              sx={{ 
+                                p: "5px", 
+                                border: "1px solid black", 
+                                display: "flex", 
+                                flexDirection: "column" 
+                              }}
+                            >
+                              <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem" sx={{ my: 1 }}>
                                 {key.charAt(0).toUpperCase() + key.slice(1)}
-                                {/* label={element.properties.label} */}
-                              </SoftTypography>
+                              </Typography>
                               <LocalizationProvider type="datetime" dateAdapter={AdapterDateFns} key={key}>
                                 <DateTimePicker
                                   value={value || null}
@@ -711,14 +713,15 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                                     textField: (params) => <TextField
                                       {...params}
                                       fullWidth
+                                      size="small"
                                       sx={{
                                         position: 'relative',
                                         '& .MuiInputBase-root': {
-                                          paddingRight: '40px', // Add padding to make space for the icon
+                                          paddingRight: '40px',
                                         },
                                         '& .MuiInputAdornment-root': {
                                           position: 'absolute',
-                                          right: '10px', // Adjust position as needed
+                                          right: '10px',
                                           top: '50%',
                                           transform: 'translateY(-50%)',
                                         },
@@ -730,10 +733,9 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                                     minutes: renderTimeViewClock,
                                     seconds: renderTimeViewClock,
                                   }}
-
                                 />
                               </LocalizationProvider>
-                            </SoftBox>
+                            </Box>
                           );
                         } else if (key === 'inputFormat' || key === 'mask') {
                           returnVal = (
@@ -743,125 +745,125 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                               value={value}
                               onChange={(e) => handlePropertyChange(key, e.target.value)}
                               fullWidth
+                              size="small"
                             />
                           );
                         }
-                        else if(key === 'type'){
-                          returnVal = (<div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                            <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
-                              Type
-                            </SoftTypography>
-                            <Select
-                              value={dateType}
-                              isMulti={false}
-                              name="dateTime"
-                              options={dateTimeOptions}
-                              getOptionLabel ={(option)=>option.value}
-                              getOptionValue ={(option)=>option.key}
-                              className="basic-select"
-                              classNamePrefix="select"
-                              // onChange={(item) => handlePropertyChange(key, item)}
-                              onChange={handleFormatChanges}
-                            />
-                            {dateType && (
-                                  <div>
-                                    <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
-                                      Select Masking
-                                    </SoftTypography>
-                                    <Select
-                                      value={selectedDateTimeMask}
-                                      // isMulti={true}
-                                      name="Date Time Formats"
-                                      options={dateTimeMask}
-                                      getOptionLabel ={(option)=>option.value}
-                                      getOptionValue ={(option)=>option.key}
-                                      className="basic-select"
-                                      classNamePrefix="select"
-                                      // onChange={(item) => handlePropertyChange("selectFromModule", item)}
-                                      onChange={(item)=>handleDatetimeMaskChange(dateType,item)}
-                                    />
-                                  </div>
-                                )}
-                          </div>)
+                        else if (key === 'type') {
+                          returnVal = (
+                            <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                              <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                                Type
+                              </Typography>
+                              <Select
+                                value={dateType}
+                                isMulti={false}
+                                name="dateTime"
+                                options={dateTimeOptions}
+                                getOptionLabel={(option) => option.value}
+                                getOptionValue={(option) => option.key}
+                                className="basic-select"
+                                classNamePrefix="select"
+                                onChange={handleFormatChanges}
+                              />
+                              {dateType && (
+                                <div>
+                                  <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                                    Select Masking
+                                  </Typography>
+                                  <Select
+                                    value={selectedDateTimeMask}
+                                    name="Date Time Formats"
+                                    options={dateTimeMask}
+                                    getOptionLabel={(option) => option.value}
+                                    getOptionValue={(option) => option.key}
+                                    className="basic-select"
+                                    classNamePrefix="select"
+                                    onChange={(item) => handleDatetimeMaskChange(dateType, item)}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          );
                         }
-                        else if(key === 'label'){
+                        else if (key === 'label') {
                           return (
                             <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                              <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                              <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                                 {key.charAt(0).toUpperCase() + key.slice(1)}
-                              </SoftTypography>
-                              <SoftInput
+                              </Typography>
+                              <TextField
                                 value={value}
                                 onChange={(e) => handlePropertyChange(key, e.target.value)}
-                                fullwidth
+                                fullWidth
+                                size="small"
                               />
                             </div>
-                          )
+                          );
                         }
                         return returnVal;
                       }
-                      // else if (key === 'iconComponent') {
-                      //   return (
-                      //     <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                      //       <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
-                      //         Icon
-                      //       </SoftTypography>
-                      //       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'space-between' }}>
-                      //         <IconPicker
-                      //           value={value}
-                      //           onChange={(newValue) => handlePropertyChange(key, newValue)}
-                      //         />
-                      //         <Button
-                      //           // variant="outlined"
-                      //           color="error"
-                      //           startIcon={<Delete />}
-                      //           onClick={() => handlePropertyChange(key, null)}
-                      //           size="small"
-                      //         >
-                      //           Remove Icon
-                      //         </Button>
-                      //       </div>
-                      //     </div>
-                      //   );
-                      // }
+                      else if (key === 'iconComponent') {
+                        return (
+                          <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                            <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                              Icon
+                            </Typography>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'space-between' }}>
+                              <IconPicker
+                                value={value}
+                                onChange={(newValue) => handlePropertyChange(key, newValue)}
+                              />
+                              <Button
+                                color="error"
+                                startIcon={<Delete />}
+                                onClick={() => handlePropertyChange(key, null)}
+                                size="small"
+                              >
+                                Remove Icon
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      }
                       else if (selectedElement.type === 'price' && (key === 'currency' || key === 'conditions')) {
                         if (key === 'currency') {
                           return (
                             <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                              <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                              <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                                 Currency Symbol
-                              </SoftTypography>
-                                  <Select
-                                    value={value}
-                                    isMulti={false}
-                                    name="extensions"
-                                    options={currencyOptions}
-                                    getOptionLabel ={(option)=>option.value}
-                                    getOptionValue ={(option)=>option.key}
-                                    className="basic-select"
-                                    classNamePrefix="select"
-                                    onChange={(item) => handlePropertyChange(key, item)}
-                                />
+                              </Typography>
+                              <Select
+                                value={value}
+                                isMulti={false}
+                                name="extensions"
+                                options={currencyOptions}
+                                getOptionLabel={(option) => option.value}
+                                getOptionValue={(option) => option.key}
+                                className="basic-select"
+                                classNamePrefix="select"
+                                onChange={(item) => handlePropertyChange(key, item)}
+                              />
                             </div>
                           );
                         }
-                        else if(key === 'conditions'){
+                        else if (key === 'conditions') {
                           return (
                             <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                              <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                              <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                                 Condition to Apply
-                              </SoftTypography>
-                                  <Select
-                                    value={value}
-                                    isMulti={false}
-                                    name="conditions"
-                                    options={calculationConditions}
-                                    getOptionLabel ={(option)=>option.value}
-                                    getOptionValue ={(option)=>option.key}
-                                    className="basic-select"
-                                    classNamePrefix="select"
-                                    onChange={(item) => handlePropertyChange(key, item)}
-                                />
+                              </Typography>
+                              <Select
+                                value={value}
+                                isMulti={false}
+                                name="conditions"
+                                options={calculationConditions}
+                                getOptionLabel={(option) => option.value}
+                                getOptionValue={(option) => option.key}
+                                className="basic-select"
+                                classNamePrefix="select"
+                                onChange={(item) => handlePropertyChange(key, item)}
+                              />
                             </div>
                           );
                         }
@@ -869,21 +871,20 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                       else if (key === "allowedDocuments") {
                         return (
                           <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                            <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                            <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                               {key.charAt(0).toUpperCase() + key.slice(1)}
-                            </SoftTypography>
+                            </Typography>
                             <Select
                               value={value}
                               isMulti={true}
                               name="extensions"
                               options={Documentoptions}
-                              getOptionLabel ={(option)=>option.value}
-                              getOptionValue ={(option)=>option.key}
+                              getOptionLabel={(option) => option.value}
+                              getOptionValue={(option) => option.key}
                               className="basic-multi-select"
                               classNamePrefix="select"
                               onChange={(item) => handlePropertyChange(key, item)}
                             />
-
                           </div>
                         );
                       }
@@ -891,7 +892,7 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                         return (
                           <FormControlLabel
                             key={key}
-                            label={<SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">Secure Field</SoftTypography>}
+                            label={<Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">Secure Field</Typography>}
                             control={
                               <Checkbox
                                 checked={Boolean(value)}
@@ -902,31 +903,33 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                           />
                         );
                       }
-                      else if(key === "selectFromModule"){
-                        return;
+                      else if (key === "selectFromModule") {
+                        return null;
                       }
                       else {
                         return (
                           <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                            <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                            <Typography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
                               {key.charAt(0).toUpperCase() + key.slice(1)}
-                            </SoftTypography>
-                            <SoftInput
+                            </Typography>
+                            <TextField
                               value={value}
                               onChange={(e) => handlePropertyChange(key, e.target.value)}
-                              fullwidth
+                              fullWidth
+                              size="small"
                             />
                           </div>
                         );
                       }
                     })}
-                  </SoftBox>
+                  </Box>
                 )}
               </Paper>
             </Grid>
           </Grid>
         </Grid>
       </Box>
+      
       <Dialog open={loadDialogOpen} onClose={() => setLoadDialogOpen(false)}>
         <DialogTitle>Load Form</DialogTitle>
         <DialogContent>
@@ -944,6 +947,7 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
           <Button onClick={handleLoadConfirm}>Load</Button>
         </DialogActions>
       </Dialog>
+      
       <Preview
         open={showPreview}
         onClose={() => setShowPreview(false)}
@@ -955,4 +959,3 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
 };
 
 export default FormBuilder;
-
