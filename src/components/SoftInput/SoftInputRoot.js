@@ -20,7 +20,6 @@ import { styled } from "@mui/material/styles";
 export default styled(InputBase)(({ theme, ownerState }) => {
   const { palette, boxShadows, functions, typography, borders } = theme;
   const { size, error, success, iconDirection, direction, disabled } = ownerState;
-
   const { inputColors, grey, white, transparent } = palette;
   const { inputBoxShadow } = boxShadows;
   const { pxToRem, boxShadow } = functions;
