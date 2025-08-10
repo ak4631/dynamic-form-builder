@@ -41,9 +41,9 @@ import useNotify from 'components/Notify';
 
 const FormBuilder = ({toolboxItems, getDefaultProperties, accordion = 0}) => {
      
-  const { state } = useLocation();
-  const {source, sourceId, parentId } = state;   
-  console.log("this is state data: ", state);   
+  // const { state } = useLocation();
+  // const {source, sourceId, parentId } = state;   
+  // console.log("this is state data: ", state);   
   const [loading, setLoading] = useState(false);
   const [elements, setElements] = useState([]);
   const [selectedElement, setSelectedElement] = useState(null);
