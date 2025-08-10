@@ -800,30 +800,30 @@ const FormBuilder = ({toolboxItems,getDefaultProperties,accordion=0}) => {
                         }
                         return returnVal;
                       }
-                      else if (key === 'iconComponent') {
-                        return (
-                          <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
-                            <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
-                              Icon
-                            </SoftTypography>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'space-between' }}>
-                              <IconPicker
-                                value={value}
-                                onChange={(newValue) => handlePropertyChange(key, newValue)}
-                              />
-                              <Button
-                                // variant="outlined"
-                                color="error"
-                                startIcon={<Delete />}
-                                onClick={() => handlePropertyChange(key, null)}
-                                size="small"
-                              >
-                                Remove Icon
-                              </Button>
-                            </div>
-                          </div>
-                        );
-                      }
+                      // else if (key === 'iconComponent') {
+                      //   return (
+                      //     <div key={key} style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                      //       <SoftTypography component="label" variant="caption" fontWeight="bold" fontSize="1rem">
+                      //         Icon
+                      //       </SoftTypography>
+                      //       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'space-between' }}>
+                      //         <IconPicker
+                      //           value={value}
+                      //           onChange={(newValue) => handlePropertyChange(key, newValue)}
+                      //         />
+                      //         <Button
+                      //           // variant="outlined"
+                      //           color="error"
+                      //           startIcon={<Delete />}
+                      //           onClick={() => handlePropertyChange(key, null)}
+                      //           size="small"
+                      //         >
+                      //           Remove Icon
+                      //         </Button>
+                      //       </div>
+                      //     </div>
+                      //   );
+                      // }
                       else if (selectedElement.type === 'price' && (key === 'currency' || key === 'conditions')) {
                         if (key === 'currency') {
                           return (

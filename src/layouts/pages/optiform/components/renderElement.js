@@ -61,10 +61,10 @@ const renderElement = (element) => {
                 name: `${element.field_row_id}`,
                 extra_param: "You Can add Multiple extra params" // this property won't come when save
               }}
-              icon={{
-                component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                direction: "left",
-              }}
+              // icon={{
+              //   component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
+              //   direction: "left",
+              // }}
             />
           </Tooltip>
         </SoftBox>
@@ -118,10 +118,6 @@ const renderElement = (element) => {
                   height: '100%',
                   resize: 'none',
                 },
-              }}
-              icon={{
-                component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                direction: "left",
               }}
             // enableRichTextEditor={element.properties.enableRichTextEditor}
             />
@@ -231,10 +227,6 @@ const renderElement = (element) => {
                 name: `${element.field_row_id}`,
                 extra_param: "You Can add Multiple extra params" // this property won't come when save
               }}
-              icon={{
-                component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                direction: "left",
-              }}
             />
           </Tooltip>
         </SoftBox>
@@ -276,10 +268,6 @@ const renderElement = (element) => {
                 multiple: Boolean(element.properties.allowMultiple),
                 accept: `${selectedDocumentType}`,
                 size: element.properties.maxFileSize
-              }}
-              icon={{
-                component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                direction: "left",
               }}
             />
           </Tooltip>
@@ -336,10 +324,6 @@ const renderElement = (element) => {
                 required={Boolean(element.properties.required)}
                 fullwidth
                 variant="outlined"
-                icon={{
-                  component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                  direction: "left",
-                }}
               /> :
               <Link href="#" underline="hover" sx={{ display: "flex", fontSize: "1rem" }}>
                 {element.properties.displayName}
@@ -434,10 +418,10 @@ const renderElement = (element) => {
                 // value={inputValue}
                 // onValueChange={(value) => setInputValue(value)}
                 // onBlur={handleBlur}
-                icon={{
-                  component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                  direction: "left",
-                }}
+                // icon={{
+                //   component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
+                //   direction: "left",
+                // }}
                 // decimalSeparator={element.properties.currency.key === '' }
                 sx={{
                   width: '100%',

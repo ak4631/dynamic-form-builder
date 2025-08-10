@@ -58,10 +58,10 @@ const FormElement = ({ element, index, onClick, isSelected, inEditor }) => {
                   minLength: `${element.properties.minLength}`,
                   // startadornment: Icon && <InputAdornment position="start"><Icon /></InputAdornment>,
                 }}
-                icon={{
-                  component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
-                  direction: "left",
-                }}
+                // icon={{
+                //   component: Icon && <InputAdornment position='start' sx={{ marginTop: "8px;" }}><Icon /></InputAdornment>,
+                //   direction: "left",
+                // }}
               />
             </Tooltip>
           </SoftBox>
