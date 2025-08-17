@@ -311,35 +311,35 @@ const FormBuilder = ({toolboxItems, getDefaultProperties, accordion = 0}) => {
   };
 
   const handleSave = async () => {
-    setLoading(true);
+    // setLoading(true);
     const formData = {
       elements,
       layout,
     };
-    
-    try {
-      const response = await axios.post(API_BASE_URL + `/saveForm`, {formData, id, source, sourceId, parentId}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      console.log("this is response data: ", response);
-      if (response.data.err_flag == 1) {
-        notify(response.data.err_msg, 'e');
-      }
-      else {
-        notify(response.data.res, 's');
-        if (typeof response.data.design !== undefined) {
-          setElements(response.data.design.elements);
-          setLayout(response.data.design.layout);
-          setLoadJson('');
-        }
-      }
-    } catch (error) {
-      console.error(error.response?.status === 401 ? 'Unauthorized access - invalid or expired token' : 'An error occurred:', error);
-    }
-    finally {
-      fetchDesign(id);
-      setLoading(false);
-    }
+    console.log("FormData",formData)
+    // try {
+    //   const response = await axios.post(API_BASE_URL + `/saveForm`, {formData, id, source, sourceId, parentId}, {
+    //     headers: { Authorization: `Bearer ${token}` }
+    //   });
+    //   console.log("this is response data: ", response);
+    //   if (response.data.err_flag == 1) {
+    //     notify(response.data.err_msg, 'e');
+    //   }
+    //   else {
+    //     notify(response.data.res, 's');
+    //     if (typeof response.data.design !== undefined) {
+    //       setElements(response.data.design.elements);
+    //       setLayout(response.data.design.layout);
+    //       setLoadJson('');
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.error(error.response?.status === 401 ? 'Unauthorized access - invalid or expired token' : 'An error occurred:', error);
+    // }
+    // finally {
+    //   fetchDesign(id);
+    //   setLoading(false);
+    // }
   };
 
   const handleLoad = () => {
@@ -661,8 +661,14 @@ const FormBuilder = ({toolboxItems, getDefaultProperties, accordion = 0}) => {
                               type="color"
                               value={value}
                               onChange={(e) => handlePropertyChange(key, e.target.value)}
-                              fullWidth
-                              size="small"
+                              // sx={{margin:"10px",width:"100% !important",padding:"10px"}}
+                              InputProps={{
+                                sx: {
+                                  input: {
+                                    width: "100% !important", // 👈 applied to <input>
+                                  }
+                                }
+                              }}
                             />
                           </div>
                         );

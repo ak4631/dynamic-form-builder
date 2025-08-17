@@ -65,7 +65,7 @@ const renderElement = (element) => {
           </Typography>
           <Tooltip title={element.properties.toolTip}>
             <TextField
-              label={element.properties.label}
+              // label={element.properties.label}
               placeholder={element.properties.placeholder}
               required={Boolean(element.properties.required)}
               fullWidth
@@ -127,7 +127,7 @@ const renderElement = (element) => {
             <div>Rich text editor placeholder</div>
           ) : (
             <TextField
-              label={element.properties.label}
+              // label={element.properties.label}
               placeholder={element.properties.placeholder}
               multiline
               rows={4}
@@ -304,7 +304,7 @@ const renderElement = (element) => {
           <Tooltip title={element.properties.toolTip}>
             <TextField
               type="email"
-              label={element.properties.label}
+              // label={element.properties.label}
               placeholder={element.properties.placeholder}
               required={Boolean(element.properties.required)}
               fullWidth
@@ -360,7 +360,7 @@ const renderElement = (element) => {
           <Tooltip title={element.properties.toolTip}>
             <TextField
               type="file"
-              label={element.properties.label}
+              // label={element.properties.label}
               placeholder={element.properties.placeholder}
               required={Boolean(element.properties.required)}
               fullWidth
@@ -441,7 +441,7 @@ const renderElement = (element) => {
             {element.properties.displayName === "" ? (
               <TextField
                 type="url"
-                label={element.properties.label}
+                // label={element.properties.label}
                 placeholder={element.properties.placeholder}
                 required={Boolean(element.properties.required)}
                 fullWidth
@@ -486,7 +486,7 @@ const renderElement = (element) => {
           </Typography>
           <TextField
             type="date"
-            label={element.properties.label}
+            // label={element.properties.label}
             placeholder={element.properties.placeholder}
             required={Boolean(element.properties.required)}
             fullWidth
@@ -522,7 +522,7 @@ const renderElement = (element) => {
           </Typography>
           <TextField
             type="time"
-            label={element.properties.label}
+            // label={element.properties.label}
             placeholder={element.properties.placeholder}
             required={Boolean(element.properties.required)}
             fullWidth
